@@ -66,8 +66,6 @@ jobs:
     steps:
     - name: Check out the repository to the runner
       uses: actions/checkout@v4  
-    - name: Make the verify script executable
-      run: chmod +x verify-image.sh    
     - name: Docker login
       run: docker login ghcr.io -u imre-gabor -p ${{ github.token }}
     - name: Verify Docker image
