@@ -9,7 +9,7 @@ on:
     - main
 
 jobs:
-  build:
+  maven:
 
     runs-on: ubuntu-latest
     permissions:
@@ -27,3 +27,29 @@ jobs:
 
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+
+  docker-build-publish:
+    runs-on: ubuntu-latest
+    needs: maven
+    permissions:
+      contents: read
+      packages: write
+
+    steps:    
+    - name: Docker login
+      run: docker login ghcr.io -u imre-gabor -p ${{ github.token }}
+    - name: Docker build
+      run: docker build . -t ghcr.io/imre-gabor/cubix/1/homework/app:springboot
+    - name: Docker publish
+      run: docker push ghcr.io/imre-gabor/cubix/1/homework/app:springboot
+
+  docker-verify:
+    runs-on: ubuntu-latest
+    needs: docker-build-publish
+    permissions:
+      contents: read
+      packages: write
+
+    steps:    
+    - name: Verify Docker image
+      run: ./verify-image.sh
