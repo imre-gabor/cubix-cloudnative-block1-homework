@@ -16,7 +16,7 @@ public class ApplicationController {
     @GetMapping("/application/test")
     public CubixResponse demoMessage(@RequestParam(required = false, name = "message") String message) {
         if (!StringUtils.hasText(message)) {
-            message = "default";
+            message = "This is a default message";
         }
         return new CubixResponse(LocalDateTime.now(), message);
     }
